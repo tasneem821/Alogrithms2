@@ -167,15 +167,30 @@ public:
     }
 
     void printLeaderboard(int topN) {
-        cout << "Top " << topN << " Players:" << endl;
+        vector<pair<int, int>> playersScores;
         Node* current = players.getHead()->next[0];
-        int count = 0;
-        while (current != players.getTail() && count < topN) {
-            cout << "Player " << current->key<< " - Score: " << current->value << endl;
+
+        while (current != players.getTail()) {
+            playersScores.push_back({current->key, current->value});
             current = current->next[0];
+        }
+
+        sort(playersScores.begin(), playersScores.end(),
+             [](const pair<int, int>& a, const pair<int, int>& b) {
+                 return a.second > b.second;
+             });
+
+        cout << "Top " << topN << " Players by Score:" << endl;
+        int count = 0;
+        for (const auto& player : playersScores) {
+            if (count >= topN) break;
+            cout << "Player " << player.first << " - Score: " << player.second << endl;
             count++;
         }
     }
+
+
+  
 };
 
 int main() {
